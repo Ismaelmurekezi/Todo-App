@@ -2,9 +2,9 @@
 
 const InputTask = () => {
   return (
-    <div className="relative">
+    <div className="relative mt-20">
       <h1 className="flex justify-center text-2xl text-primary py-12 font-bold">
-        TRACK YOUR ACTIVITY
+        ADD YOUR ACTIVITY
       </h1>
       <form action="" className="flex gap-2">
         <input
