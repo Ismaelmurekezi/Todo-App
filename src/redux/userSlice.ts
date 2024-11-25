@@ -65,13 +65,14 @@ export const loginUser = createAsyncThunk<
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
+      credentials: "include",
     });
     if (!response.ok) {
       const errorData = await response.json();
       return rejectWithValue(errorData.message || "Failed to log in");
     }
     const userData = await response.json();
-    localStorage.setItem("User", JSON.stringify(userData.token));
+    localStorage.setItem("access_token", JSON.stringify(userData.token));
     return userData;
   } catch (error) {}
   return rejectWithValue("Failed to log user in");

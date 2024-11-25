@@ -9,18 +9,26 @@ import { TbLogout } from "react-icons/tb";
 import { BsListTask } from "react-icons/bs";
 
 const Home = () => {
-  const user: any = localStorage.getItem("User");
+  const user: any = localStorage.getItem("access_token");
   const [toogleDropdown, setToogleDropdown] = useState(false);
+  let decoded:any = null;
   let loggedUser = null;
+    let loggedUserId=null
   if (user) {
     try {
-      const decoded: any = jwtDecode(user);
+       decoded = jwtDecode(user);
       loggedUser = decoded.rest.username;
+      loggedUserId = decoded.rest._id
     } catch (error) {
       console.error("Error decoding token:", error);
-      localStorage.removeItem("User"); 
+      localStorage.removeItem("access_token");
     }
   }
+ 
+  const logUserOut = () => {
+    localStorage.removeItem("access_token");
+    window.location.reload();
+  };
 
   return (
     <div className="flex justify-center h-full relative" id="home">
@@ -38,26 +46,29 @@ const Home = () => {
           {toogleDropdown && (
             <div className="bg-white border-2 border-gray-300 rounded-md ">
               <Link
-                to="/tasks"
+                to={`/tasks/${loggedUserId}`}
                 className="w-full flex items-center gap-2 hover:bg-gray-100  py-1 px-2"
               >
                 <BsListTask color="blue" />
-                <span>Manage Task</span>
+                <span className="">Manage Task</span>
               </Link>
-              <li className="w-full flex items-center gap-2 hover:bg-gray-100 py-1 px-2">
+              <span className="w-full flex items-center gap-2 hover:bg-gray-100 py-1 px-2 cursor-pointer">
                 <TbLogout color="red" />
-                <span>Logout</span>
-              </li>
+                <span onClick={logUserOut}>Logout</span>
+              </span>
             </div>
           )}
         </div>
       ) : (
+          
         <Link to="/login">
           <Button />
         </Link>
       )}
+      <InputTask loggedUserId={loggedUserId} />
 
-      <InputTask />
+
+
     </div>
   );
 };
